@@ -1,5 +1,7 @@
 # AMS Tuned Profiles (OrcaSlicer plugin)
 
+> I'm not a programmer, but this bothered me enough that I asked Claude to build it. Here it is, in case it helps someone else.
+
 When you sync a Bambu AMS, Orca picks the stock profile for each spool ("Bambu PLA Matte"), even if you have a tuned profile for that exact colour. This plugin fixes that. It reads the spools from the printer and puts your own tuned profile in each RFID-tagged slot.
 
 - **Learns each colour once.** Bambu RFID tags include a colour code (for example `A01-K1`). The first time it sees a colour, it asks which of your profiles to use, then remembers it for every spool of that colour.
