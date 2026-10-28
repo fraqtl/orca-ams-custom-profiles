@@ -1,8 +1,8 @@
-# AMS Tuned Profiles (OrcaSlicer plugin)
+# AMS Custom Profiles (OrcaSlicer plugin)
 
 > I'm not a programmer, but this bothered me enough that I asked Claude to build it. Here it is, in case it helps someone else.
 
-When you sync a Bambu AMS, Orca picks the stock profile for each spool ("Bambu PLA Matte"), even if you have a tuned profile for that exact colour. This plugin fixes that. It reads the spools from the printer and puts your own tuned profile in each RFID-tagged slot.
+When you sync a Bambu AMS, Orca picks the stock profile for each spool ("Bambu PLA Matte"), even if you have a custom profile for that exact colour. This plugin fixes that. It reads the spools from the printer and puts your own custom profile in each RFID-tagged slot.
 
 - **Learns each colour once.** Bambu RFID tags include a colour code (for example `A01-K1`). The first time it sees a colour, it asks which of your profiles to use, then remembers it for every spool of that colour.
 - **Leaves untagged spools alone.** Third-party spools without a Bambu tag keep whatever profile you chose for that AMS slot.
@@ -25,19 +25,19 @@ This plugin was written almost entirely by Claude (Anthropic's AI model, using C
 
 ## Install
 
-1. Copy the `ams_tuned_profiles` folder into Orca's plugin folder:
+1. Copy the `ams_custom_profiles` folder into Orca's plugin folder:
    - **Windows:** `%APPDATA%\OrcaSlicer\orca_plugins\`
    - **macOS:** `~/Library/Application Support/OrcaSlicer/orca_plugins/`
    - **Linux:** `~/.config/OrcaSlicer/orca_plugins/`
 2. Restart Orca.
-3. Open **Preferences > Plugins** and check that **AMS Tuned Profiles** is enabled.
+3. Open **Preferences > Plugins** and check that **AMS Custom Profiles** is enabled.
 
 ## Use
 
 1. Sync the AMS in the Prepare tab as usual.
-2. Open **Preferences > Plugins**, click the arrow next to **AMS Tuned Profiles**, then run **Apply tuned AMS profiles**.
+2. Open **Preferences > Plugins**, click the arrow next to **AMS Custom Profiles**, then run **Apply custom AMS profiles**.
 3. **First run only:** enter the printer's IP address, serial number and access code. All three are on the printer screen. Allow the network connection when Orca asks.
-4. For each colour it hasn't seen before, choose your tuned profile.
+4. For each colour it hasn't seen before, choose your custom profile.
 5. A summary shows what it set in each slot.
 
 Your colour-to-profile links are stored in the plugin's settings, under `links`. You can edit or delete them in the Plugins dialog.

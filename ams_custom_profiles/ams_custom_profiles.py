@@ -3,12 +3,12 @@
 # dependencies = []
 #
 # [tool.orcaslicer.plugin]
-# name = "AMS Tuned Profiles"
-# description = "Reads the AMS spools from a Bambu printer over the local network and puts your own tuned filament profile in each RFID-tagged slot. Asks once for any spool colour it has not seen, then remembers it. Provided as-is; written with AI assistance."
+# name = "AMS Custom Profiles"
+# description = "Reads the AMS spools from a Bambu printer over the local network and puts your own custom filament profile in each RFID-tagged slot. Asks once for any spool colour it has not seen, then remembers it. Provided as-is; written with AI assistance."
 # author = "fraqtl (written with Claude, Anthropic's AI)"
-# version = "0.2.0"
+# version = "0.3.0"
 # ///
-"""Match each AMS spool to a tuned filament profile.
+"""Match each AMS spool to a custom filament profile.
 
 Bambu RFID spools report a colour code (tray_id_name, e.g. A01-K1), so one link covers every
 spool of that colour. Untagged spools are left alone. Links and printer details live in this
@@ -29,7 +29,7 @@ import orca
 
 MQTT_PORT = 8883
 TIMEOUT_S = 15
-TITLE = "AMS Tuned Profiles"
+TITLE = "AMS Custom Profiles"
 
 
 class PrinterDetailsWrong(Exception):
@@ -84,7 +84,7 @@ def read_ams(ip, serial, access_code):
     ctx.verify_mode = ssl.CERT_NONE
     with ctx.wrap_socket(socket.create_connection((ip, MQTT_PORT), timeout=TIMEOUT_S)) as sock:
         body = _str("MQTT") + bytes([4, 0xC2]) + struct.pack("!H", 60)
-        body += _str("orca-ams-tuned-%d" % os.getpid()) + _str("bblp") + _str(access_code)
+        body += _str("orca-ams-custom-%d" % os.getpid()) + _str("bblp") + _str(access_code)
         sock.sendall(_packet(0x10, body))
         first, ack = _read_packet(sock)
         if first != 0x20 or ack[1] != 0:
@@ -173,7 +173,7 @@ def ask_for_preset(tray, slot, names):
 <p><b>New spool in slot %d</b></p>
 <p><span style="display:inline-block;width:14px;height:14px;background:%s;border:1px solid #888;vertical-align:middle"></span>
  %s</p>
-<p>Which tuned profile should this colour use? Every spool with this colour will get it from now on.</p>
+<p>Which custom profile should this colour use? Every spool with this colour will get it from now on.</p>
 <select id="p" style="width:100%%;padding:4px">%s</select>
 <p style="margin-top:16px">
 <button onclick="orca.submit({preset: document.getElementById('p').value})">Use this profile</button>
@@ -215,9 +215,9 @@ def candidate_presets(material_id):
 
 # --- plugin --------------------------------------------------------------------------------
 
-class ApplyTunedProfiles(orca.script.ScriptPluginCapabilityBase):
+class ApplyCustomProfiles(orca.script.ScriptPluginCapabilityBase):
     def get_name(self):
-        return "Apply tuned AMS profiles"
+        return "Apply custom AMS profiles"
 
     def get_default_config(self):
         return {"printer_ip": "", "printer_serial": "", "access_code": "", "links": {}}
@@ -293,8 +293,8 @@ class ApplyTunedProfiles(orca.script.ScriptPluginCapabilityBase):
 
 
 @orca.plugin
-class AmsTunedProfiles(orca.base):
+class AmsCustomProfiles(orca.base):
     def register_capabilities(self):
         # The printer's address is only known from the plugin's settings, which can't be read at
         # registration, so Orca asks for network permission on the first connection instead.
-        orca.register_capability(ApplyTunedProfiles)
+        orca.register_capability(ApplyCustomProfiles)

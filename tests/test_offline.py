@@ -1,4 +1,4 @@
-"""Offline test of ams_tuned_profiles: a fake `orca` module plus sample AMS data from a P2S.
+"""Offline test of ams_custom_profiles: a fake `orca` module plus sample AMS data from a P2S.
 
 Run with any Python 3.10+ (no printer or Orca needed):  python tests/test_offline.py
 """
@@ -10,7 +10,7 @@ import threading
 import time
 import types
 
-PLUGIN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ams_tuned_profiles", "ams_tuned_profiles.py")
+PLUGIN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ams_custom_profiles", "ams_custom_profiles.py")
 USER = "C:/Users/me/AppData/Roaming/OrcaSlicer/user/123/filament/%s.json"
 
 # One AMS as a P2S reports it: two Bambu RFID spools, two untagged spools set by hand.
@@ -131,7 +131,7 @@ def run_on_worker(fn):  # Orca runs execute() on a Script worker thread, not the
     return out["r"]
 
 
-cap = mod.ApplyTunedProfiles()
+cap = mod.ApplyCustomProfiles()
 cap.get_config = lambda: stored["cfg"]
 cap.save_config = lambda s: stored.update(cfg=s) or True
 _execute = cap.execute
